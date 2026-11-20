@@ -21,6 +21,11 @@ _SELECT_ALL_CAFES = (
     "SELECT id, name, map_url, img_url, location, has_sockets, has_toilet, "
     "has_wifi, can_take_calls, seats, coffee_price FROM cafe ORDER BY name"
 )
+_SELECT_CAFE = (
+    "SELECT id, name, map_url, img_url, location, has_sockets, has_toilet, "
+    "has_wifi, can_take_calls, seats, coffee_price FROM cafe WHERE id = ?"
+)
+_DELETE_CAFE = "DELETE FROM cafe WHERE id = ?"
 _INSERT_CAFE = (
     "INSERT INTO cafe (name, map_url, img_url, location, has_sockets, has_toilet, "
     "has_wifi, can_take_calls, seats, coffee_price) "
@@ -83,6 +88,23 @@ class SqliteCafeRepository:
                 raise DuplicateCafeError(new_cafe.name) from error
             raise
         return Cafe(id=int(str(cafe_id)), **asdict(new_cafe))
+
+    def get_cafe(self, cafe_id: int) -> Cafe | None:
+        """Return the cafe with the id, or None when there is none."""
+        with closing(self._connection.execute(_SELECT_CAFE, (cafe_id,))) as cursor:
+            row = cursor.fetchone()
+        return None if row is None else _to_cafe(row)
+
+    def delete_cafe(self, cafe_id: int) -> bool:
+        """Delete the cafe with a bound parameter and commit.
+
+        @param cafe_id Id of the cafe to remove.
+        @return True when a row was removed.
+        """
+        with closing(self._connection.execute(_DELETE_CAFE, (cafe_id,))) as cursor:
+            removed = cursor.rowcount > 0
+        self._connection.commit()
+        return removed
 
 
 def _to_cafe(row: tuple[object, ...]) -> Cafe:

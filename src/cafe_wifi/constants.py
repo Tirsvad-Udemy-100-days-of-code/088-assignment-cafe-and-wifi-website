@@ -32,6 +32,15 @@ HOME_PATH = "/"
 ## @brief Path of the add cafe form.
 ADD_PATH = "/add"
 
+## @brief Start of the path of the delete confirmation page; the id follows.
+DELETE_PATH_PREFIX = "/delete/"
+
+## @brief Pattern of a delete path; the group is the cafe id in ASCII digits.
+DELETE_PATH_PATTERN = r"/delete/(\d+)"
+
+## @brief Largest cafe id the database can hold (signed 64 bit integer).
+MAX_CAFE_ID = 2**63 - 1
+
 ## @brief HTTP methods the home page answers.
 ALLOWED_METHODS = ("GET", "HEAD")
 
@@ -43,6 +52,12 @@ ADD_ALLOWED_METHODS = ("GET", "HEAD", "POST")
 
 ## @brief Value of the Allow header of a 405 response for the add cafe form.
 ADD_ALLOW_HEADER_VALUE = ", ".join(ADD_ALLOWED_METHODS)
+
+## @brief HTTP methods the delete page answers.
+DELETE_ALLOWED_METHODS = ("GET", "HEAD", "POST")
+
+## @brief Value of the Allow header of a 405 response for the delete page.
+DELETE_ALLOW_HEADER_VALUE = ", ".join(DELETE_ALLOWED_METHODS)
 
 ## @brief Largest request body in bytes the site reads (64 KiB).
 MAX_BODY_BYTES = 64 * 1024
@@ -143,6 +158,21 @@ TEXT_SUBMIT = "Add cafe"
 ## @brief Legend of the facilities group of the form.
 TEXT_FACILITIES = "Facilities"
 
+## @brief Heading of the delete confirmation page.
+TITLE_DELETE = "Delete a cafe"
+
+## @brief Question on the confirmation page; $name is substituted (escaped).
+DELETE_QUESTION = "Do you really want to delete $name?"
+
+## @brief Note on the confirmation page that the deletion is final.
+DELETE_WARNING = "This cannot be undone."
+
+## @brief Text of the delete link on a card and of the confirm button.
+TEXT_DELETE = "Delete"
+
+## @brief Text of the link that leaves the confirmation page.
+TEXT_CANCEL = "Cancel"
+
 ## @brief Content type of every HTML response.
 CONTENT_TYPE_HTML = "text/html; charset=utf-8"
 
@@ -230,6 +260,12 @@ font:inherit}
 fieldset{border:1px solid #ddd;border-radius:6px;display:flex;flex-wrap:wrap;gap:1rem}
 button{align-self:flex-start;padding:.6rem 1.4rem;border:0;border-radius:6px;
 background:#8a4b1f;color:#fff;font:inherit;cursor:pointer}
+.card-actions{margin:0}
+.card-actions a{color:#b3261e}
+.confirm{max-width:640px;background:#fff;border-radius:10px;padding:1.5rem;
+box-shadow:0 1px 4px rgba(0,0,0,.15);display:flex;flex-direction:column;gap:1rem}
+.confirm .actions{display:flex;align-items:center;gap:1.25rem}
+button.danger{background:#b3261e}
 @media (max-width:600px){main{padding:1rem}header{padding:1rem}}
 """
 

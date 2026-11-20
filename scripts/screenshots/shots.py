@@ -36,6 +36,19 @@ def take_add_form(page: Page, base: str, out: Path) -> None:
     page.screenshot(path=str(out / "step-2-add-errors.png"), full_page=True)
 
 
+def take_delete_confirm(page: Page, base: str, out: Path) -> None:
+    """Take the screenshot of the delete confirmation of the first cafe.
+
+    @param page Browser page to draw in.
+    @param base Base URL of the running site.
+    @param out Folder the PNG file is written to.
+    """
+    page.goto(base)
+    page.click("text=Delete >> nth=0")
+    page.wait_for_selector("form.confirm")
+    page.screenshot(path=str(out / "step-3-delete-confirm.png"), full_page=True)
+
+
 def take(step: str, page: Page, base: str, out: Path) -> None:
     """Take the screenshots of one build step.
 
@@ -49,5 +62,8 @@ def take(step: str, page: Page, base: str, out: Path) -> None:
         return
     if step == "2":
         take_add_form(page, base, out)
+        return
+    if step == "3":
+        take_delete_confirm(page, base, out)
         return
     raise SystemExit(f"step {step} has no screenshots defined yet")

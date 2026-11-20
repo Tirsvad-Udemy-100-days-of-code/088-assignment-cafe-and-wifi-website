@@ -22,6 +22,12 @@ class FakeCafeRepository:
     def get_all_cafes(self) -> list[Cafe]:
         return []
 
+    def get_cafe(self, cafe_id: int) -> Cafe | None:
+        return None
+
+    def delete_cafe(self, cafe_id: int) -> bool:
+        return False
+
     def add_cafe(self, new_cafe: NewCafe) -> Cafe:
         if any(added.name == new_cafe.name for added in self.added):
             raise DuplicateCafeError(new_cafe.name)
