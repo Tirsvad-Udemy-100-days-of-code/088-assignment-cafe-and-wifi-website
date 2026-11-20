@@ -34,7 +34,7 @@ def start_site(database: Path) -> tuple[WSGIServer, str]:
     @param database Path of the SQLite file the site reads and writes.
     @return The running server and its base URL.
     """
-    from cafe_wifi.app import create_app  # imported late: not present at baseline
+    from cafe_wifi.presentation.app import create_app  # needs sys.path set above
 
     server = make_server("127.0.0.1", 0, create_app(database))
     threading.Thread(target=server.serve_forever, daemon=True).start()
