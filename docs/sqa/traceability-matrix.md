@@ -10,7 +10,7 @@
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
 | 2026-11-20 | Deprecated | Jens Tirsvad Nielsen | S01 | Initial version | [5cdbee2] |
-| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Added ADR-0001, ADR-0002 and the baseline code review | pending |
+| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Added ADR-0001, ADR-0002 and the baseline code review | [d5e342e] |
 
 ---
 
@@ -89,3 +89,4 @@ No ADR, test plan, use case or design artifact exists yet; `-` in a Decisions or
 [RC-010]: ./reviews/rc-010-adr-0001-standard-library-only.md
 [RC-011]: ./reviews/rc-011-adr-0002-mvc-for-server-rendered-pages.md
 [RC-012]: ./reviews/rc-012-mil-001-python-baseline.md
+[d5e342e]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/088-assignment-cafe-and-wifi-website/commit/d5e342ec0423422898af77236c6e248163319f25
