@@ -10,7 +10,7 @@
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
 | 2026-11-20 | Deprecated | Jens Tirsvad Nielsen | S01 | Added review RC-013 of the step 1 code | [ca685b9] |
-| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Added review RC-014 of the step 2 code | pending |
+| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Added review RC-014 of the step 2 code | [5edd2a9] |
 
 ---
 
@@ -91,3 +91,4 @@ No ADR, test plan, use case or design artifact exists yet; `-` in a Decisions or
 [RC-013]: ./reviews/rc-013-mil-002-python-list-cafes.md
 [RC-012]: ./reviews/rc-012-mil-001-python-baseline.md
 [ca685b9]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/088-assignment-cafe-and-wifi-website/commit/ca685b94698968702b12cfbe89219be70694a376
+[5edd2a9]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/088-assignment-cafe-and-wifi-website/commit/5edd2a9d6646a2c1f110bbd529776dff4edcec7d
