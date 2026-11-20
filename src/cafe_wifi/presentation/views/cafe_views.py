@@ -12,6 +12,7 @@ from cafe_wifi.constants import (
     ADD_PATH,
     APP_NAME,
     BADGES,
+    DELETE_PATH_PREFIX,
     HOME_SUBTITLE,
     LABEL_MAP,
     LABEL_PRICE,
@@ -20,6 +21,7 @@ from cafe_wifi.constants import (
     PAGE_TEMPLATE,
     SAFE_URL_SCHEMES,
     TEXT_ADD_LINK,
+    TEXT_DELETE,
     TEXT_NO_CAFES,
     TEXT_UNKNOWN,
 )
@@ -98,6 +100,8 @@ def render_cafe_card(cafe: Cafe) -> str:
         f"{_render_fact(LABEL_SEATS, cafe.seats)}"
         f"{_render_fact(LABEL_PRICE, cafe.coffee_price)}"
         f"{map_link}"
+        f'<p class="card-actions"><a href="{DELETE_PATH_PREFIX}{cafe.id}">'
+        f"{escape(TEXT_DELETE)}</a></p>"
         "</div></article>"
     )
 

@@ -2,6 +2,8 @@
 
 import sqlite3
 from collections.abc import Iterator
+from contextlib import closing
+from pathlib import Path
 
 import pytest
 
@@ -162,3 +164,51 @@ def test_add_cafe_stores_sql_injection_text_as_data(
     names = [c.name for c in repository.get_all_cafes()]
     assert evil in names
     assert len(names) == 3
+
+
+def test_get_cafe_returns_cafe_of_existing_id(connection: sqlite3.Connection) -> None:
+    cafe = SqliteCafeRepository(connection).get_cafe(2)
+    assert cafe is not None
+    assert (cafe.id, cafe.name, cafe.coffee_price) == (2, "Alpha", "\u00a32.40")
+
+
+def test_get_cafe_returns_none_for_unknown_id(connection: sqlite3.Connection) -> None:
+    assert SqliteCafeRepository(connection).get_cafe(99) is None
+
+
+def test_delete_cafe_removes_existing_row_and_keeps_others(
+    connection: sqlite3.Connection,
+) -> None:
+    repository = SqliteCafeRepository(connection)
+    assert repository.delete_cafe(1) is True
+    assert [c.name for c in repository.get_all_cafes()] == ["Alpha"]
+    assert repository.get_cafe(1) is None
+
+
+def test_delete_cafe_returns_false_and_changes_nothing_for_unknown_id(
+    connection: sqlite3.Connection,
+) -> None:
+    repository = SqliteCafeRepository(connection)
+    assert repository.delete_cafe(99) is False
+    assert len(repository.get_all_cafes()) == 2
+
+
+def test_delete_cafe_returns_false_when_deleted_twice(
+    connection: sqlite3.Connection,
+) -> None:
+    repository = SqliteCafeRepository(connection)
+    assert repository.delete_cafe(2) is True
+    assert repository.delete_cafe(2) is False
+
+
+def test_delete_cafe_commits_the_change(tmp_path: Path) -> None:
+    path = tmp_path / "c.db"
+    with closing(sqlite3.connect(path)) as first:
+        first.execute(SCHEMA)
+        first.execute(
+            INSERT, (1, "Zed", "http://m", "http://i", "Bank", 1, 0, 1, 0, None, None)
+        )
+        first.commit()
+        assert SqliteCafeRepository(first).delete_cafe(1) is True
+    with closing(sqlite3.connect(path)) as second:
+        assert SqliteCafeRepository(second).get_all_cafes() == []

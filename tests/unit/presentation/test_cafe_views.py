@@ -8,6 +8,7 @@ from cafe_wifi.presentation.views.cafe_views import (
     render_page,
     safe_url,
 )
+from cafe_wifi.presentation.views.delete_cafe_views import render_delete_confirmation
 from cafe_wifi.presentation.views.error_views import render_error_page
 
 
@@ -56,7 +57,7 @@ def test_render_cafe_card_omits_unsafe_urls() -> None:
     html = render_cafe_card(make_cafe(map_url="javascript:alert(1)", img_url="data:x"))
     assert "javascript:" not in html
     assert "<img" not in html
-    assert "<a " not in html
+    assert ">Map</a>" not in html
 
 
 def test_render_cafe_card_shows_price_seats_and_badges() -> None:
@@ -123,3 +124,21 @@ def test_render_add_form_keeps_checked_boxes() -> None:
 
 def test_render_cafe_list_page_links_to_add_form() -> None:
     assert '<a href="/add">Add a cafe</a>' in render_cafe_list_page([])
+
+
+def test_render_cafe_card_links_to_delete_page() -> None:
+    assert '<a href="/delete/5">Delete</a>' in render_cafe_card(make_cafe(id=5))
+
+
+def test_render_delete_confirmation_names_cafe_and_posts_to_delete_path() -> None:
+    html = render_delete_confirmation(make_cafe(id=5, name="Blue"))
+    assert "<strong>Blue</strong>" in html
+    assert 'method="post" action="/delete/5"' in html
+    assert ">Delete</button>" in html
+    assert '<a href="/">Cancel</a>' in html
+
+
+def test_render_delete_confirmation_escapes_script_name() -> None:
+    html = render_delete_confirmation(make_cafe(name="<script>alert(1)</script>"))
+    assert "<script>alert(1)</script>" not in html
+    assert "&lt;script&gt;alert(1)&lt;/script&gt;" in html

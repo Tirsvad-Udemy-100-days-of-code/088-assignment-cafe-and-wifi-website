@@ -2,7 +2,11 @@
 
 from urllib.parse import urlencode
 
+import pytest
+
 from cafe_wifi.application.use_cases.add_cafe import AddCafe
+from cafe_wifi.application.use_cases.delete_cafe import DeleteCafe
+from cafe_wifi.application.use_cases.get_cafe import GetCafe
 from cafe_wifi.application.use_cases.list_cafes import ListCafes
 from cafe_wifi.constants import MAX_BODY_BYTES
 from cafe_wifi.domain.entities.cafe import Cafe
@@ -19,11 +23,27 @@ FORM = {
 }
 
 
+CAFE = Cafe(
+    1,
+    "<script>A</script>",
+    "http://m",
+    "http://i",
+    "L",
+    True,
+    True,
+    True,
+    True,
+    None,
+    None,
+)
+
+
 class FakeCafeRepository:
     """Fake of the cafe repository port."""
 
     def __init__(self) -> None:
         self.added: list[NewCafe] = []
+        self.deleted: list[int] = []
 
     def add_cafe(self, new_cafe: NewCafe) -> Cafe:
         if new_cafe.name == "A":
@@ -32,16 +52,26 @@ class FakeCafeRepository:
         return Cafe(2, **{n: getattr(new_cafe, n) for n in NewCafe.__slots__})
 
     def get_all_cafes(self) -> list[Cafe]:
-        return [
-            Cafe(
-                1, "A", "http://m", "http://i", "L", True, True, True, True, None, None
-            )
-        ]
+        return [CAFE]
+
+    def get_cafe(self, cafe_id: int) -> Cafe | None:
+        return CAFE if cafe_id == CAFE.id else None
+
+    def delete_cafe(self, cafe_id: int) -> bool:
+        if cafe_id != CAFE.id:
+            return False
+        self.deleted.append(cafe_id)
+        return True
 
 
 def make_controller(repository: FakeCafeRepository | None = None) -> CafeController:
     repository = repository or FakeCafeRepository()
-    return CafeController(ListCafes(repository), AddCafe(repository))
+    return CafeController(
+        ListCafes(repository),
+        AddCafe(repository),
+        GetCafe(repository),
+        DeleteCafe(repository),
+    )
 
 
 def post(
@@ -123,3 +153,65 @@ def test_handle_returns_400_for_too_many_fields() -> None:
 
 def test_handle_returns_405_for_post_home() -> None:
     assert make_controller().handle("POST", "/").status == "405 Method Not Allowed"
+
+
+def test_handle_returns_confirmation_for_get_delete() -> None:
+    repository = FakeCafeRepository()
+    response = make_controller(repository).handle("GET", "/delete/1")
+    assert response.status == "200 OK"
+    assert "&lt;script&gt;A&lt;/script&gt;" in response.body
+    assert 'method="post"' in response.body
+    assert repository.deleted == []
+
+
+def test_handle_accepts_head_delete_without_deleting() -> None:
+    repository = FakeCafeRepository()
+    assert make_controller(repository).handle("HEAD", "/delete/1").status == "200 OK"
+    assert repository.deleted == []
+
+
+def test_handle_deletes_and_redirects_for_post_delete() -> None:
+    repository = FakeCafeRepository()
+    response = make_controller(repository).handle("POST", "/delete/1")
+    assert response.status == "303 See Other"
+    assert ("Location", "/") in response.extra_headers
+    assert repository.deleted == [1]
+
+
+def test_handle_returns_404_for_get_delete_of_unknown_id() -> None:
+    assert make_controller().handle("GET", "/delete/99").status == "404 Not Found"
+
+
+def test_handle_returns_404_for_post_delete_of_unknown_id() -> None:
+    repository = FakeCafeRepository()
+    response = make_controller(repository).handle("POST", "/delete/99")
+    assert response.status == "404 Not Found"
+    assert repository.deleted == []
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/delete/abc",
+        "/delete/-1",
+        "/delete/1/2",
+        "/delete/",
+        "/delete",
+        "/delete/1 ",
+        "/delete/1\n",
+        "/delete/\u0661",
+        "/delete/99999999999999999999999999",
+    ],
+)
+def test_handle_returns_404_for_bad_delete_id(path: str) -> None:
+    repository = FakeCafeRepository()
+    controller = make_controller(repository)
+    assert controller.handle("GET", path).status == "404 Not Found"
+    assert controller.handle("POST", path).status == "404 Not Found"
+    assert repository.deleted == []
+
+
+def test_handle_returns_405_with_allow_header_for_put_delete() -> None:
+    response = make_controller().handle("PUT", "/delete/1")
+    assert response.status == "405 Method Not Allowed"
+    assert ("Allow", "GET, HEAD, POST") in response.extra_headers

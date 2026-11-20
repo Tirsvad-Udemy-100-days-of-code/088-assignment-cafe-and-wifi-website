@@ -4,9 +4,12 @@
 @brief Maps a request line and body to a use case call and a response.
 """
 
+import re
 from urllib.parse import parse_qs
 
 from cafe_wifi.application.use_cases.add_cafe import AddCafe
+from cafe_wifi.application.use_cases.delete_cafe import DeleteCafe
+from cafe_wifi.application.use_cases.get_cafe import GetCafe
 from cafe_wifi.application.use_cases.list_cafes import ListCafes
 from cafe_wifi.constants import (
     ADD_ALLOW_HEADER_VALUE,
@@ -14,9 +17,13 @@ from cafe_wifi.constants import (
     ADD_PATH,
     ALLOW_HEADER_VALUE,
     ALLOWED_METHODS,
+    DELETE_ALLOW_HEADER_VALUE,
+    DELETE_ALLOWED_METHODS,
+    DELETE_PATH_PATTERN,
     HEADER_LOCATION,
     HOME_PATH,
     MAX_BODY_BYTES,
+    MAX_CAFE_ID,
     MAX_FORM_FIELDS,
     RESPONSE_ENCODING,
     STATUS_BAD_REQUEST,
@@ -34,7 +41,19 @@ from cafe_wifi.constants import (
 from cafe_wifi.presentation.controllers.response import Response
 from cafe_wifi.presentation.views.add_cafe_views import render_add_form
 from cafe_wifi.presentation.views.cafe_views import render_cafe_list_page
+from cafe_wifi.presentation.views.delete_cafe_views import render_delete_confirmation
 from cafe_wifi.presentation.views.error_views import render_error_page
+
+_DELETE_PATH = re.compile(DELETE_PATH_PATTERN, re.ASCII)
+
+
+def _parse_delete_id(path: str) -> int | None:
+    """Return the cafe id of a delete path, or None when the path is not one."""
+    match = _DELETE_PATH.fullmatch(path)
+    if match is None:
+        return None
+    cafe_id = int(match.group(1))
+    return cafe_id if cafe_id <= MAX_CAFE_ID else None
 
 
 def _error_response(status: str, message: str) -> Response:
@@ -66,16 +85,26 @@ def _parse_form(body: bytes) -> dict[str, str]:
 
 ## @brief Answers requests for the cafe pages.
 class CafeController:
-    """Controller for GET / (the list) and GET and POST /add (the form)."""
+    """Controller for GET / (the list), /add (the form) and /delete/<id>."""
 
-    def __init__(self, list_cafes: ListCafes, add_cafe: AddCafe) -> None:
+    def __init__(
+        self,
+        list_cafes: ListCafes,
+        add_cafe: AddCafe,
+        get_cafe: GetCafe,
+        delete_cafe: DeleteCafe,
+    ) -> None:
         """Keep the use cases the pages need.
 
         @param list_cafes Use case that returns all cafes.
         @param add_cafe Use case that stores a new cafe.
+        @param get_cafe Use case that returns one cafe.
+        @param delete_cafe Use case that removes a cafe.
         """
         self._list_cafes = list_cafes
         self._add_cafe = add_cafe
+        self._get_cafe = get_cafe
+        self._delete_cafe = delete_cafe
 
     def handle(self, method: str, path: str, body: bytes = b"") -> Response:
         """Return the response for a request.
@@ -84,12 +113,15 @@ class CafeController:
         @param path Request path.
         @param body Request body, read only for POST /add.
         @return The page, a 303 redirect, a 422 form with errors, 404 for another
-        path or 405 for a method the path does not accept.
+        path or an unknown cafe id, or 405 for a method the path does not accept.
         """
         if path == HOME_PATH:
             return self._handle_home(method)
         if path == ADD_PATH:
             return self._handle_add(method, body)
+        cafe_id = _parse_delete_id(path)
+        if cafe_id is not None:
+            return self._handle_delete(method, cafe_id)
         return _error_response(STATUS_NOT_FOUND, TEXT_NOT_FOUND)
 
     def _handle_home(self, method: str) -> Response:
@@ -118,3 +150,16 @@ class CafeController:
         if errors:
             return Response(STATUS_UNPROCESSABLE, render_add_form(form, errors))
         return Response(STATUS_SEE_OTHER, "", ((HEADER_LOCATION, HOME_PATH),))
+
+    def _handle_delete(self, method: str, cafe_id: int) -> Response:
+        """Answer a request for the delete page; only POST deletes."""
+        if method not in DELETE_ALLOWED_METHODS:
+            return _not_allowed(DELETE_ALLOW_HEADER_VALUE)
+        if method == "POST":
+            if not self._delete_cafe.execute(cafe_id):
+                return _error_response(STATUS_NOT_FOUND, TEXT_NOT_FOUND)
+            return Response(STATUS_SEE_OTHER, "", ((HEADER_LOCATION, HOME_PATH),))
+        cafe = self._get_cafe.execute(cafe_id)
+        if cafe is None:
+            return _error_response(STATUS_NOT_FOUND, TEXT_NOT_FOUND)
+        return Response(STATUS_OK, render_delete_confirmation(cafe))

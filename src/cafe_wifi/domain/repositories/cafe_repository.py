@@ -1,7 +1,7 @@
 """The cafe repository port.
 
 @file cafe_repository.py
-@brief The interface the application layer needs to read and add cafes.
+@brief The interface the application layer needs to read, add and delete cafes.
 """
 
 from typing import Protocol
@@ -24,5 +24,17 @@ class CafeRepository(Protocol):
         @param new_cafe The validated cafe to store.
         @return The stored cafe.
         @throws DuplicateCafeError When a cafe with the same name exists.
+        """
+        ...
+
+    def get_cafe(self, cafe_id: int) -> Cafe | None:
+        """Return the cafe with the id, or None when there is none."""
+        ...
+
+    def delete_cafe(self, cafe_id: int) -> bool:
+        """Delete the cafe with the id.
+
+        @param cafe_id Id of the cafe to remove.
+        @return True when a row was removed, False when the id is unknown.
         """
         ...

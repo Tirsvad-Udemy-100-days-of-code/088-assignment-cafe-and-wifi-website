@@ -11,6 +11,8 @@ from pathlib import Path
 from typing import Any
 
 from cafe_wifi.application.use_cases.add_cafe import AddCafe
+from cafe_wifi.application.use_cases.delete_cafe import DeleteCafe
+from cafe_wifi.application.use_cases.get_cafe import GetCafe
 from cafe_wifi.application.use_cases.list_cafes import ListCafes
 from cafe_wifi.constants import CONTENT_TYPE_HTML, MAX_BODY_BYTES, RESPONSE_ENCODING
 from cafe_wifi.infrastructure.persistence.sqlite_cafe_repository import (
@@ -51,7 +53,12 @@ def create_app(
         path = str(environ.get("PATH_INFO", "/")) or "/"
         with closing(sqlite3.connect(database)) as connection:
             repository = SqliteCafeRepository(connection)
-            controller = CafeController(ListCafes(repository), AddCafe(repository))
+            controller = CafeController(
+                ListCafes(repository),
+                AddCafe(repository),
+                GetCafe(repository),
+                DeleteCafe(repository),
+            )
             response = controller.handle(method, path, read_body(environ))
         body = response.body.encode(RESPONSE_ENCODING)
         headers = [
