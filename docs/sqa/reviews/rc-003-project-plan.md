@@ -9,7 +9,7 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Initial version | pending |
+| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Initial version | [5cdbee2] |
 
 ---
 
@@ -72,3 +72,4 @@ Go — every Mandatory criterion passes or is not applicable with a stated reaso
 [PP-001]: ../../project-plan.md
 [QC-PP-001]: ../../../framework/qc/artifacts/qc-project-plan.md
 [QC-LANG-001]: ../../../framework/qc/artifacts/qc-language-domain.md
+[5cdbee2]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/088-assignment-cafe-and-wifi-website/commit/5cdbee2df2a2f92661408d724235b4d340ef3ca1

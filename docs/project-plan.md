@@ -11,7 +11,7 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Initial version | pending |
+| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Initial version | [5cdbee2] |
 
 ---
 
@@ -100,3 +100,4 @@ A No-Go on a gateway moves every later date by the time of the rework; S01 decid
 [MIL-003]: ./milestones/mil-003-step-2-add-cafe.md
 [MIL-004]: ./milestones/mil-004-step-3-delete-cafe.md
 [MIL-005]: ./milestones/mil-005-documentation-and-wiki.md
+[5cdbee2]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/088-assignment-cafe-and-wifi-website/commit/5cdbee2df2a2f92661408d724235b4d340ef3ca1
