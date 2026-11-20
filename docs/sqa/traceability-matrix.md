@@ -9,8 +9,8 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-20 | Deprecated | Jens Tirsvad Nielsen | S01 | Added review RC-014 of the step 2 code | [5edd2a9] |
-| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Added review RC-015 of the step 3 code | [7a0c82b] |
+| 2026-11-20 | Deprecated | Jens Tirsvad Nielsen | S01 | Added review RC-015 of the step 3 code | [7a0c82b] |
+| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Added the wiki row and its review RC-016 | pending |
 
 ---
 
@@ -39,6 +39,7 @@ Tracks backward/forward links between artifact instances so that the Business Ca
 | [MIL-005] | Milestone | en | it | [BC-001], [PP-001] | - | [RC-009] |
 | [ADR-0001] | ADR | - | - | [BC-001], [SA-001] | - | [RC-010] |
 | [ADR-0002] | ADR | - | - | [BC-001], [SA-001] | - | [RC-011] |
+| docs/wiki | Wiki (en, da, ms) | en, da, ms | - | [BC-001], [SA-001] | - | [RC-016] |
 
 ## Concern Coverage
 
@@ -87,9 +88,9 @@ No ADR, test plan, use case or design artifact exists yet; `-` in a Decisions or
 [ADR-0002]: ../adr/adr-0002-mvc-for-server-rendered-pages.md
 [RC-010]: ./reviews/rc-010-adr-0001-standard-library-only.md
 [RC-011]: ./reviews/rc-011-adr-0002-mvc-for-server-rendered-pages.md
+[RC-016]: ./reviews/rc-016-mil-005-wiki.md
 [RC-015]: ./reviews/rc-015-mil-004-python-delete-cafe.md
 [RC-014]: ./reviews/rc-014-mil-003-python-add-cafe.md
 [RC-013]: ./reviews/rc-013-mil-002-python-list-cafes.md
 [RC-012]: ./reviews/rc-012-mil-001-python-baseline.md
-[5edd2a9]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/088-assignment-cafe-and-wifi-website/commit/5edd2a9d6646a2c1f110bbd529776dff4edcec7d
 [7a0c82b]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/088-assignment-cafe-and-wifi-website/commit/7a0c82bc3ddbb3000d248b8d7852d1a0e5ccbb9a

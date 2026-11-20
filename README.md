@@ -27,6 +27,17 @@ The site reads the supplied SQLite database `data/cafes.db` (21 London cafes) an
 
 The site has no runtime dependency: it uses the Python standard library only (`wsgiref`, `sqlite3`). The source is documented with Doxygen comments, and a `Doxyfile` is included.
 
+### Screenshots
+
+| Step | Screenshot |
+| --- | --- |
+| 1. List the cafes | ![Step 1: the list of cafes](docs/screenshots/step-1-list.png) |
+| 2. Add a cafe | ![Step 2: the add form](docs/screenshots/step-2-add-form.png) |
+| 2. Add a cafe, with errors | ![Step 2: the form with errors](docs/screenshots/step-2-add-errors.png) |
+| 3. Delete a cafe | ![Step 3: the delete confirmation](docs/screenshots/step-3-delete-confirm.png) |
+
+The pictures of the cafes are links to other websites; the screenshots were taken in a container without internet access, so those areas are grey. What each step taught is explained in the [wiki][documentation], in English, Danish and Bahasa Melayu.
+
 ## 📋 Requirements
 
 - Python 3.13 or newer, to run the site and the tests.
