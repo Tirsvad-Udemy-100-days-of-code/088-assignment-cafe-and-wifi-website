@@ -22,6 +22,20 @@ def take_list(page: Page, base: str, out: Path) -> None:
     page.screenshot(path=str(out / "step-1-list.png"), full_page=True)
 
 
+def take_add_form(page: Page, base: str, out: Path) -> None:
+    """Take the screenshots of the empty add form and of its error state.
+
+    @param page Browser page to draw in.
+    @param base Base URL of the running site.
+    @param out Folder the PNG files are written to.
+    """
+    page.goto(f"{base}/add")
+    page.screenshot(path=str(out / "step-2-add-form.png"), full_page=True)
+    page.click("button[type=submit]")
+    page.wait_for_selector(".error")
+    page.screenshot(path=str(out / "step-2-add-errors.png"), full_page=True)
+
+
 def take(step: str, page: Page, base: str, out: Path) -> None:
     """Take the screenshots of one build step.
 
@@ -32,5 +46,8 @@ def take(step: str, page: Page, base: str, out: Path) -> None:
     """
     if step == "1":
         take_list(page, base, out)
+        return
+    if step == "2":
+        take_add_form(page, base, out)
         return
     raise SystemExit(f"step {step} has no screenshots defined yet")

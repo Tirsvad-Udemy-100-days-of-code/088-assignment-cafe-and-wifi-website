@@ -1,5 +1,6 @@
 """Integration test: the WSGI app against a copy of the real database."""
 
+import io
 import shutil
 from pathlib import Path
 from typing import Any
@@ -15,10 +16,15 @@ REAL_DB = Path(__file__).resolve().parents[2] / "data" / "cafes.db"
 
 
 def call(
-    app: Any, method: str = "GET", path: str = "/"
+    app: Any, method: str = "GET", path: str = "/", body: bytes = b""
 ) -> tuple[str, dict[str, str], str]:
     """Call a WSGI app and return status, headers and decoded body."""
-    environ: dict[str, Any] = {"REQUEST_METHOD": method, "PATH_INFO": path}
+    environ: dict[str, Any] = {
+        "REQUEST_METHOD": method,
+        "PATH_INFO": path,
+        "CONTENT_LENGTH": str(len(body)),
+        "wsgi.input": io.BytesIO(body),
+    }
     setup_testing_defaults(environ)
     captured: dict[str, Any] = {}
 

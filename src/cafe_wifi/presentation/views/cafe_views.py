@@ -9,6 +9,7 @@ from string import Template
 from urllib.parse import urlsplit
 
 from cafe_wifi.constants import (
+    ADD_PATH,
     APP_NAME,
     BADGES,
     HOME_SUBTITLE,
@@ -18,6 +19,7 @@ from cafe_wifi.constants import (
     PAGE_CSS,
     PAGE_TEMPLATE,
     SAFE_URL_SCHEMES,
+    TEXT_ADD_LINK,
     TEXT_NO_CAFES,
     TEXT_UNKNOWN,
 )
@@ -39,12 +41,14 @@ def safe_url(url: str) -> str | None:
 #  @param title Page title and heading.
 #  @param subtitle Line under the heading.
 #  @param content HTML of the page body, already escaped.
+#  @param actions HTML of the links in the header, already escaped.
 #  @return The complete HTML document.
-def render_page(title: str, subtitle: str, content: str) -> str:
+def render_page(title: str, subtitle: str, content: str, actions: str = "") -> str:
     """Return a full HTML page; title and subtitle are escaped here."""
     return Template(PAGE_TEMPLATE).substitute(
         title=escape(title),
         subtitle=escape(subtitle),
+        actions=actions,
         css=PAGE_CSS,
         content=content,
     )
@@ -108,4 +112,5 @@ def render_cafe_list_page(cafes: list[Cafe]) -> str:
         content = f'<section class="grid">\n{cards}\n</section>'
     else:
         content = f"<p>{escape(TEXT_NO_CAFES)}</p>"
-    return render_page(APP_NAME, HOME_SUBTITLE, content)
+    add_link = f'<a href="{ADD_PATH}">{escape(TEXT_ADD_LINK)}</a>'
+    return render_page(APP_NAME, HOME_SUBTITLE, content, add_link)
