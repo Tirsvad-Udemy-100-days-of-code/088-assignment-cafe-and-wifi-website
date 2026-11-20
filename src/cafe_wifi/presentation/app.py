@@ -10,8 +10,9 @@ from contextlib import closing
 from pathlib import Path
 from typing import Any
 
+from cafe_wifi.application.use_cases.add_cafe import AddCafe
 from cafe_wifi.application.use_cases.list_cafes import ListCafes
-from cafe_wifi.constants import CONTENT_TYPE_HTML, RESPONSE_ENCODING
+from cafe_wifi.constants import CONTENT_TYPE_HTML, MAX_BODY_BYTES, RESPONSE_ENCODING
 from cafe_wifi.infrastructure.persistence.sqlite_cafe_repository import (
     SqliteCafeRepository,
 )
@@ -19,6 +20,22 @@ from cafe_wifi.presentation.controllers.cafe_controller import CafeController
 
 ## WSGI start_response callable.
 StartResponse = Callable[..., Any]
+
+
+## @brief Read the request body, at most one byte more than the limit.
+#  @param environ WSGI environment of the request.
+#  @return The body bytes; empty when the length is missing or invalid.
+def read_body(environ: dict[str, Any]) -> bytes:
+    """Read the body up to the size limit plus one byte, so a larger one shows."""
+    try:
+        length = int(environ.get("CONTENT_LENGTH") or 0)
+    except ValueError:
+        return b""
+    if length <= 0:
+        return b""
+    stream = environ["wsgi.input"]
+    data: bytes = stream.read(min(length, MAX_BODY_BYTES + 1))
+    return data
 
 
 ## @brief Create the WSGI application for a database file.
@@ -33,8 +50,9 @@ def create_app(
         method = str(environ.get("REQUEST_METHOD", "GET"))
         path = str(environ.get("PATH_INFO", "/")) or "/"
         with closing(sqlite3.connect(database)) as connection:
-            controller = CafeController(ListCafes(SqliteCafeRepository(connection)))
-            response = controller.handle(method, path)
+            repository = SqliteCafeRepository(connection)
+            controller = CafeController(ListCafes(repository), AddCafe(repository))
+            response = controller.handle(method, path, read_body(environ))
         body = response.body.encode(RESPONSE_ENCODING)
         headers = [
             ("Content-Type", CONTENT_TYPE_HTML),

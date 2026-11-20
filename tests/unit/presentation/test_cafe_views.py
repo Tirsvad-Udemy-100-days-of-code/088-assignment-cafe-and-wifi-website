@@ -1,6 +1,7 @@
 """Tests of the cafe views."""
 
 from cafe_wifi.domain.entities.cafe import Cafe
+from cafe_wifi.presentation.views.add_cafe_views import render_add_form
 from cafe_wifi.presentation.views.cafe_views import (
     render_cafe_card,
     render_cafe_list_page,
@@ -88,3 +89,37 @@ def test_render_error_page_shows_status_and_escapes_message() -> None:
     html = render_error_page("404 Not Found", "<i>x</i>")
     assert "404 Not Found" in html
     assert "<i>" not in html
+
+
+def test_render_add_form_is_empty_without_values() -> None:
+    html = render_add_form({}, {})
+    assert 'method="post" action="/add"' in html
+    assert 'class="error"' not in html
+    assert "checked" not in html
+
+
+def test_render_add_form_escapes_entered_values() -> None:
+    html = render_add_form({"name": '"><script>alert(1)</script>'}, {})
+    assert "<script>" not in html
+    assert "&quot;&gt;&lt;script&gt;" in html
+
+
+def test_render_add_form_escapes_errors() -> None:
+    html = render_add_form({}, {"name": "<b>bad</b>"})
+    assert "<b>" not in html
+    assert "&lt;b&gt;bad" in html
+
+
+def test_render_add_form_shows_error_beside_its_field() -> None:
+    html = render_add_form({}, {"map_url": "Nope"})
+    assert 'class="field invalid"' in html
+    assert 'id="error-map_url">Nope' in html
+
+
+def test_render_add_form_keeps_checked_boxes() -> None:
+    html = render_add_form({"has_wifi": "on"}, {})
+    assert html.count(" checked>") == 1
+
+
+def test_render_cafe_list_page_links_to_add_form() -> None:
+    assert '<a href="/add">Add a cafe</a>' in render_cafe_list_page([])

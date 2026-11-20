@@ -1,18 +1,30 @@
 """SQLite implementation of the cafe repository.
 
 @file sqlite_cafe_repository.py
-@brief Reads cafes with the standard library sqlite3 module.
+@brief Reads and stores cafes with the standard library sqlite3 module.
 """
 
 import sqlite3
 from contextlib import closing
+from dataclasses import asdict
 
-from cafe_wifi.constants import PRICE_CURRENCY_SIGN, PRICE_REPLACEMENT_CHARACTER
+from cafe_wifi.constants import (
+    PRICE_CURRENCY_SIGN,
+    PRICE_REPLACEMENT_CHARACTER,
+    SQLITE_UNIQUE_ERROR_NAME,
+)
 from cafe_wifi.domain.entities.cafe import Cafe
+from cafe_wifi.domain.entities.new_cafe import NewCafe
+from cafe_wifi.domain.errors.duplicate_cafe_error import DuplicateCafeError
 
 _SELECT_ALL_CAFES = (
     "SELECT id, name, map_url, img_url, location, has_sockets, has_toilet, "
     "has_wifi, can_take_calls, seats, coffee_price FROM cafe ORDER BY name"
+)
+_INSERT_CAFE = (
+    "INSERT INTO cafe (name, map_url, img_url, location, has_sockets, has_toilet, "
+    "has_wifi, can_take_calls, seats, coffee_price) "
+    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 )
 
 
@@ -41,6 +53,36 @@ class SqliteCafeRepository:
         """Return every cafe ordered by name."""
         with closing(self._connection.execute(_SELECT_ALL_CAFES)) as cursor:
             return [_to_cafe(row) for row in cursor.fetchall()]
+
+    def add_cafe(self, new_cafe: NewCafe) -> Cafe:
+        """Insert the cafe with bound parameters and commit.
+
+        @param new_cafe The validated cafe to store.
+        @return The stored cafe with its id.
+        @throws DuplicateCafeError When the name is already stored.
+        """
+        values = (
+            new_cafe.name,
+            new_cafe.map_url,
+            new_cafe.img_url,
+            new_cafe.location,
+            new_cafe.has_sockets,
+            new_cafe.has_toilet,
+            new_cafe.has_wifi,
+            new_cafe.can_take_calls,
+            new_cafe.seats,
+            new_cafe.coffee_price,
+        )
+        try:
+            with closing(self._connection.execute(_INSERT_CAFE, values)) as cursor:
+                cafe_id = cursor.lastrowid
+            self._connection.commit()
+        except sqlite3.IntegrityError as error:
+            self._connection.rollback()
+            if error.sqlite_errorname == SQLITE_UNIQUE_ERROR_NAME:
+                raise DuplicateCafeError(new_cafe.name) from error
+            raise
+        return Cafe(id=int(str(cafe_id)), **asdict(new_cafe))
 
 
 def _to_cafe(row: tuple[object, ...]) -> Cafe:

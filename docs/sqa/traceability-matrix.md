@@ -9,8 +9,8 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-20 | Deprecated | Jens Tirsvad Nielsen | S01 | Added ADR-0001, ADR-0002 and the baseline code review | [d5e342e] |
-| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Added review RC-013 of the step 1 code | [ca685b9] |
+| 2026-11-20 | Deprecated | Jens Tirsvad Nielsen | S01 | Added review RC-013 of the step 1 code | [ca685b9] |
+| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Added review RC-014 of the step 2 code | pending |
 
 ---
 
@@ -87,7 +87,7 @@ No ADR, test plan, use case or design artifact exists yet; `-` in a Decisions or
 [ADR-0002]: ../adr/adr-0002-mvc-for-server-rendered-pages.md
 [RC-010]: ./reviews/rc-010-adr-0001-standard-library-only.md
 [RC-011]: ./reviews/rc-011-adr-0002-mvc-for-server-rendered-pages.md
+[RC-014]: ./reviews/rc-014-mil-003-python-add-cafe.md
 [RC-013]: ./reviews/rc-013-mil-002-python-list-cafes.md
 [RC-012]: ./reviews/rc-012-mil-001-python-baseline.md
-[d5e342e]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/088-assignment-cafe-and-wifi-website/commit/d5e342ec0423422898af77236c6e248163319f25
 [ca685b9]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/088-assignment-cafe-and-wifi-website/commit/ca685b94698968702b12cfbe89219be70694a376
