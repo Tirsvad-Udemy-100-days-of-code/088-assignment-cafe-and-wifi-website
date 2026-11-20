@@ -9,8 +9,8 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-20 | Deprecated | Jens Tirsvad Nielsen | S01 | Initial version | [5cdbee2] |
-| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Added ADR-0001, ADR-0002 and the baseline code review | [d5e342e] |
+| 2026-11-20 | Deprecated | Jens Tirsvad Nielsen | S01 | Added ADR-0001, ADR-0002 and the baseline code review | [d5e342e] |
+| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Added review RC-013 of the step 1 code | pending |
 
 ---
 
@@ -83,10 +83,10 @@ No ADR, test plan, use case or design artifact exists yet; `-` in a Decisions or
 [RC-007]: ./reviews/rc-007-mil-003-step-2-add-cafe.md
 [RC-008]: ./reviews/rc-008-mil-004-step-3-delete-cafe.md
 [RC-009]: ./reviews/rc-009-mil-005-documentation-and-wiki.md
-[5cdbee2]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/088-assignment-cafe-and-wifi-website/commit/5cdbee2df2a2f92661408d724235b4d340ef3ca1
 [ADR-0001]: ../adr/adr-0001-standard-library-only.md
 [ADR-0002]: ../adr/adr-0002-mvc-for-server-rendered-pages.md
 [RC-010]: ./reviews/rc-010-adr-0001-standard-library-only.md
 [RC-011]: ./reviews/rc-011-adr-0002-mvc-for-server-rendered-pages.md
+[RC-013]: ./reviews/rc-013-mil-002-python-list-cafes.md
 [RC-012]: ./reviews/rc-012-mil-001-python-baseline.md
 [d5e342e]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/088-assignment-cafe-and-wifi-website/commit/d5e342ec0423422898af77236c6e248163319f25

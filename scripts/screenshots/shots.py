@@ -11,6 +11,17 @@ from pathlib import Path
 from playwright.sync_api import Page
 
 
+def take_list(page: Page, base: str, out: Path) -> None:
+    """Take the full-page screenshot of the cafe list.
+
+    @param page Browser page to draw in.
+    @param base Base URL of the running site.
+    @param out Folder the PNG file is written to.
+    """
+    page.goto(base)
+    page.screenshot(path=str(out / "step-1-list.png"), full_page=True)
+
+
 def take(step: str, page: Page, base: str, out: Path) -> None:
     """Take the screenshots of one build step.
 
@@ -19,6 +30,7 @@ def take(step: str, page: Page, base: str, out: Path) -> None:
     @param base Base URL of the running site.
     @param out Folder the PNG files are written to.
     """
-    raise SystemExit(
-        f"step {step} has no screenshots defined yet ({base}, {out}, {page})"
-    )
+    if step == "1":
+        take_list(page, base, out)
+        return
+    raise SystemExit(f"step {step} has no screenshots defined yet")
