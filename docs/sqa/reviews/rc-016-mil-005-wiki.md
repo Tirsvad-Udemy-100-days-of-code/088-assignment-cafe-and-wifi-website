@@ -9,7 +9,7 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-20 | Proposed | Jens Tirsvad Nielsen | S01 | Initial version | pending |
+| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Initial version | pending |
 
 ---
 
@@ -39,19 +39,19 @@
 | 11 | Every page starts with the language line, with the current language in bold and a link to the same page in each other language | Pass | Every page starts with a language line with the current language in bold. |
 | 12 | A page in a language other than English is named `<Page>-<code>.md`, with a BCP 47 code; English has no suffix | Pass | Suffixes -da and -ms; English has none. |
 | 13 | Code blocks, commands, file names and IDs stay in English in every language | Pass | Met; checked in the repository folder by a link and page-set script (no dead link; Home, 3 step pages and Reflection exist in en, da, ms). |
-| 14 | The sidebar, every page and every link were checked on the published wiki after the change, not only in the repository | Pending | The wiki is published by the host after the merge; the check on the published pages is task issue 32 and is recorded in a follow-up change. |
+| 14 | The sidebar, every page and every link were checked on the published wiki after the change, not only in the repository | Pass | All 16 pages, the sidebar and the three Home pages answer 200 on the host API after the merge; the screenshot links answer 200. |
 | 15 | A change to the layout rules (sections, order, naming) is made in the generator or template and in this checklist's source rules together | Pass | Met; checked in the repository folder by a link and page-set script (no dead link; Home, 3 step pages and Reflection exist in en, da, ms). |
 | 16 | The wiki folder (`docs/wiki/`) is flat: every page, `Home.md` and `_Sidebar.md` included, is directly in it, and languages are told apart by file name, never by a subfolder | Pass | All 16 files are directly in docs/wiki/. |
 
 ## Overall Verdict
 
-Go-with-conditions — every Mandatory criterion passes or is not applicable except criterion 14, which can only be checked after the merge publishes the wiki. The review is by a stand-in for S01 and is not independent.
+Go — every Mandatory criterion passes or is not applicable; criterion 14 was checked on the published wiki after the merge. The review is by a stand-in for S01 and is not independent.
 
 ## Action Items
 
 | Action | Owner | Due |
 | --- | --- | --- |
-| Check every page and link on the published wiki, then set criterion 14 to Pass and the verdict to Go | S01 | 2026-11-26 |
+| None | S01 | |
 
 ---
 
