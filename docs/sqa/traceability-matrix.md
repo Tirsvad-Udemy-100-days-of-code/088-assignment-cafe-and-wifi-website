@@ -9,7 +9,8 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Initial version | [5cdbee2] |
+| 2026-11-20 | Deprecated | Jens Tirsvad Nielsen | S01 | Initial version | [5cdbee2] |
+| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Added ADR-0001, ADR-0002 and the baseline code review | pending |
 
 ---
 
@@ -36,6 +37,8 @@ Tracks backward/forward links between artifact instances so that the Business Ca
 | [MIL-003] | Milestone | en | it | [BC-001], [PP-001] | - | [RC-007] |
 | [MIL-004] | Milestone | en | it | [BC-001], [PP-001] | - | [RC-008] |
 | [MIL-005] | Milestone | en | it | [BC-001], [PP-001] | - | [RC-009] |
+| [ADR-0001] | ADR | - | - | [BC-001], [SA-001] | - | [RC-010] |
+| [ADR-0002] | ADR | - | - | [BC-001], [SA-001] | - | [RC-011] |
 
 ## Concern Coverage
 
@@ -44,11 +47,11 @@ Tracks backward/forward links between artifact instances so that the Business Ca
 | CN-001 | MIL-002, MIL-003, MIL-004 | - | - | Covered |
 | CN-002 | MIL-001 to MIL-005 | - | - | Covered |
 | CN-003 | MIL-002 to MIL-005 (wiki step pages) | - | - | Covered |
-| CN-004 | MIL-002 to MIL-004 | - | - | Covered |
+| CN-004 | MIL-002 to MIL-004 | [ADR-0002] | - | Covered |
 | CN-005 | MIL-001, MIL-005 | - | - | Covered |
 | CN-006 | MIL-002 to MIL-005 | - | - | Covered |
 | CN-007 | MIL-001, MIL-005 | - | - | Covered |
-| CN-008 | MIL-001 | - | - | Covered |
+| CN-008 | MIL-001 | [ADR-0001] | - | Covered |
 
 ## Open Inconsistencies
 
@@ -58,7 +61,7 @@ Tracks backward/forward links between artifact instances so that the Business Ca
 
 ## Coverage Notes
 
-No ADR, test plan, use case or design artifact exists yet; `-` in a Decisions or Quality check cell means none exists yet. Source code and its review records are added when code is reviewed.
+No ADR, test plan, use case or design artifact exists yet; `-` in a Decisions or Quality check cell means none exists yet. Source code reviews are listed in the pull requests; [RC-012] reviews the baseline code of MIL-001.
 
 ---
 
@@ -81,3 +84,8 @@ No ADR, test plan, use case or design artifact exists yet; `-` in a Decisions or
 [RC-008]: ./reviews/rc-008-mil-004-step-3-delete-cafe.md
 [RC-009]: ./reviews/rc-009-mil-005-documentation-and-wiki.md
 [5cdbee2]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/088-assignment-cafe-and-wifi-website/commit/5cdbee2df2a2f92661408d724235b4d340ef3ca1
+[ADR-0001]: ../adr/adr-0001-standard-library-only.md
+[ADR-0002]: ../adr/adr-0002-mvc-for-server-rendered-pages.md
+[RC-010]: ./reviews/rc-010-adr-0001-standard-library-only.md
+[RC-011]: ./reviews/rc-011-adr-0002-mvc-for-server-rendered-pages.md
+[RC-012]: ./reviews/rc-012-mil-001-python-baseline.md
