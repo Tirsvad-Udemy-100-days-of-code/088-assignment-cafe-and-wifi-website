@@ -10,7 +10,7 @@
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
 | 2026-11-20 | Deprecated | Jens Tirsvad Nielsen | S01 | Added the wiki row and its review RC-016 | [0b84300] |
-| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Closed the condition of RC-016 after checking the published wiki | pending |
+| 2026-11-20 | Accepted | Jens Tirsvad Nielsen | S01 | Closed the condition of RC-016 after checking the published wiki | [1cde879] |
 
 ---
 
@@ -94,3 +94,4 @@ No ADR, test plan, use case or design artifact exists yet; `-` in a Decisions or
 [RC-013]: ./reviews/rc-013-mil-002-python-list-cafes.md
 [RC-012]: ./reviews/rc-012-mil-001-python-baseline.md
 [0b84300]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/088-assignment-cafe-and-wifi-website/commit/0b84300fb5c411711b779ef5a16daf2eb306c52b
+[1cde879]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/088-assignment-cafe-and-wifi-website/commit/1cde87938cb8aedeb76a2a043770676e62859cfd
